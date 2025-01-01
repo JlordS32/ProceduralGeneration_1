@@ -9,7 +9,7 @@ public abstract class NoiseGenerator {
     [SerializeField] protected float _lacunarity;
     [Range(0, 1)]
     [SerializeField] protected float _persistance = 0.5f;
-    [SerializeField] protected Vector2 _offset;
+    [SerializeField] protected Vector2 _offset = new Vector2(0.1f, 0.1f);
 
     // Variables
     protected Tile[,] _tiles;
