@@ -31,11 +31,11 @@ public class TemperatureMapGenerator : NoiseGenerator
                 // Calculate the interporation between min and max temperatured base on noise value.
                 float temperature = Mathf.Lerp(_minTemperature, _maxTemperature, currentHeight);
 
-                foreach (WeatherZone zone in _weatherZones.weatherZones)
+                foreach (WeatherZone zone in _weatherZones.WeatherZones)
                 {
-                    if (temperature <= zone.temperature)
+                    if (temperature <= zone.Temperature)
                     {
-                        _tiles[x, y] = zone.tile;
+                        _tiles[x, y] = zone.Tile;
                         _tempMap[x, y] = temperature;
                         break;
                     }

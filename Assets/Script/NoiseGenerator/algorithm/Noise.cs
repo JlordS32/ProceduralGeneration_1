@@ -19,6 +19,10 @@ public static class Noise
 			scale = 0.0001f;
 		}
 		
+		if (octaves < 0) {
+			octaves = 0;
+		}
+
 		float[,] noiseMap = new float[mapWidth, mapHeight];
 
 		System.Random rng = new(seed);
@@ -29,11 +33,6 @@ public static class Noise
 			float offsetY = rng.Next(-100000, 100000) + offset.y;
 			octaveOffsets[i] = new Vector2(offsetX, offsetY);
 		}
-
-		if (octaves < 0) {
-			octaves = 0;
-		}
-
 
 		float maxNoiseHeight = float.MinValue;
 		float minNoiseHeight = float.MaxValue;

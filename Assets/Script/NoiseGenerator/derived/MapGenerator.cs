@@ -11,6 +11,10 @@ public class MapGenerator : NoiseGenerator
     private float[,] _temperatureMap;
     public void SetTemperatureMap(float[,] temperatureMap) => _temperatureMap = temperatureMap;
 
+    // Height map
+    private float[,] _heightMap;
+    public void SetHeightMap(float[,] heightMap) => _heightMap = heightMap;
+
     public override Tile[,] Generate(int width, int height)
     {
         // Generate the Perlin noise map

@@ -5,12 +5,12 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class WeatherZoneObject : ScriptableObject
 {
-    public WeatherZone[] weatherZones;
+    public WeatherZone[] WeatherZones;
 }
 
 [System.Serializable]
 public struct WeatherZone
 {
-    public float temperature;
-    public Tile tile;
+    public float Temperature;
+    public Tile Tile;
 }

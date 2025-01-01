@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 public class TileManager : MonoBehaviour
 {
-    public enum Maptype { Perlin, Temperature, Precipitation };
+    public enum Maptype { Perlin, Temperature, Height };
     [SerializeField] private Maptype _mapType;
     [SerializeField] private int _width;
     [SerializeField] private int _height;
@@ -13,7 +13,7 @@ public class TileManager : MonoBehaviour
     // References
     [SerializeField] private MapGenerator _mapGenerator;
     [SerializeField] private TemperatureMapGenerator _temperatureMapGenerator;
-    [SerializeField] private PrecipitationMapGenerator _precipitationMapGenerator;
+    [SerializeField] private HeightMapGenerator _heightMapGenerator;
 
     // Properties
     public bool AutoUpdate { get { return _autoUpdate; } }
@@ -22,7 +22,7 @@ public class TileManager : MonoBehaviour
         // Constructor initialisation.
         _mapGenerator = new MapGenerator();
         _temperatureMapGenerator = new TemperatureMapGenerator();
-        _precipitationMapGenerator = new PrecipitationMapGenerator();
+        _heightMapGenerator = new HeightMapGenerator();
     }
 
     // Method to generate the tilemap
@@ -39,17 +39,14 @@ public class TileManager : MonoBehaviour
         Tile[,] tiles;
         switch(_mapType) {
             case var _ when _mapType == Maptype.Perlin:
-                if (_temperatureMapGenerator.TemperatureMap == null) {
-                    _temperatureMapGenerator.Generate(_width, _height);
-                }
+                BaseGenerate();
                 tiles = _mapGenerator.Generate(_width, _height);
-                _mapGenerator.SetTemperatureMap(_temperatureMapGenerator.TemperatureMap);
                 break;
             case var _ when _mapType == Maptype.Temperature:
                 tiles = _temperatureMapGenerator.Generate(_width, _height);
                 break;
-            case var _ when _mapType == Maptype.Precipitation:
-                tiles = _precipitationMapGenerator.Generate(_width, _height);
+            case var _ when _mapType == Maptype.Height:
+                tiles = _heightMapGenerator.Generate(_width, _height);
                 break;
             default:
                 tiles = new Tile[0, 0];
@@ -65,6 +62,17 @@ public class TileManager : MonoBehaviour
                 Vector3Int tilePosition = new(x + xOffset, y + yOffset, 0);
                 _tilemap.SetTile(tilePosition, tiles[x, y]);
             }
+        }
+    }
+
+    private void BaseGenerate() {
+        if (_temperatureMapGenerator.TemperatureMap == null) {
+            _temperatureMapGenerator.Generate(_width, _height);
+            _mapGenerator.SetTemperatureMap(_temperatureMapGenerator.TemperatureMap);
+        }
+        if (_heightMapGenerator.HeightMap == null) {
+            _heightMapGenerator.Generate(_width, _height);
+            _mapGenerator.SetHeightMap(_heightMapGenerator.HeightMap);
         }
     }
 }
