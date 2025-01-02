@@ -11,5 +11,6 @@ public class HeightZoneObject : ScriptableObject {
 public struct HeightZone
 {
     public Tile Tile;
-    public float Height;
+    public float MinHeight;
+    public float MaxHeight;
 }

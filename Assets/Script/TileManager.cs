@@ -17,6 +17,8 @@ public class TileManager : MonoBehaviour
 
     // Properties
     public bool AutoUpdate { get { return _autoUpdate; } }
+    public int Width { get { return _width;}}
+    public int Height { get { return _height;}}
 
     private void Awake() {
         // Constructor initialisation.
