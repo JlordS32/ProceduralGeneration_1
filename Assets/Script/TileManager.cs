@@ -22,12 +22,19 @@ public class TileManager : MonoBehaviour
     public float[,] TemperatureMap { get { return _temperatureMapGenerator.TemperatureMap; } }
     public float[,] HeightMap { get { return _heightMapGenerator.HeightMap; } }
 
+    // Variables
+    Tile[,] _tiles;
+
     private void Awake()
     {
         // Constructor initialisation.
         _mapGenerator = new MapGenerator();
         _temperatureMapGenerator = new TemperatureMapGenerator();
         _heightMapGenerator = new HeightMapGenerator();
+
+        // Base Generation, we regenerate some of the layered noise maps every time the map is generated.
+        _temperatureMapGenerator.Generate(_width, _height);
+        _heightMapGenerator.Generate(_width, _height);
     }
 
     // Method to generate the tilemap
@@ -40,8 +47,6 @@ public class TileManager : MonoBehaviour
         int xOffset = -_width / 2;
         int yOffset = -_height / 2;
 
-        Tile[,] tiles;
-
         // Base Generation, we regenerate some of the layered noise maps every time the map is generated.
         _temperatureMapGenerator.Generate(_width, _height);
         _heightMapGenerator.Generate(_width, _height);
@@ -51,16 +56,16 @@ public class TileManager : MonoBehaviour
             case var _ when _mapType == Maptype.Perlin:
                 _mapGenerator.SetTemperatureMap(TemperatureMap);
                 _mapGenerator.SetHeightMap(HeightMap);
-                tiles = _mapGenerator.Generate(_width, _height);
+                _tiles = _mapGenerator.Generate(_width, _height);
                 break;
             case var _ when _mapType == Maptype.Temperature:
-                tiles = _temperatureMapGenerator.GenerateTiles(_width, _height);
+                _tiles = _temperatureMapGenerator.GenerateTiles(_width, _height);
                 break;
             case var _ when _mapType == Maptype.Height:
-                tiles = _heightMapGenerator.GenerateTiles(_width, _height);
+                _tiles = _heightMapGenerator.GenerateTiles(_width, _height);
                 break;
             default:
-                tiles = new Tile[0, 0];
+                _tiles = new Tile[0, 0];
                 Debug.LogWarning("No map type selected");
                 break;
         }
@@ -71,7 +76,7 @@ public class TileManager : MonoBehaviour
             for (int y = 0; y < _height; y++)
             {
                 Vector3Int tilePosition = new(x + xOffset, y + yOffset, 0);
-                _tilemap.SetTile(tilePosition, tiles[x, y]);
+                _tilemap.SetTile(tilePosition, _tiles[x, y]);
             }
         }
     }

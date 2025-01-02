@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "New WeatherZoneObject", menuName = "NoiseGenerators/Object/BiomeObject")]
 [System.Serializable]
-public class Biome
+public class Biome : ScriptableObject
 {
     public string Name;
     public float MinTemperature;
