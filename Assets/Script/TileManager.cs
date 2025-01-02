@@ -17,12 +17,13 @@ public class TileManager : MonoBehaviour
 
     // Properties
     public bool AutoUpdate { get { return _autoUpdate; } }
-    public int Width { get { return _width;}}
-    public int Height { get { return _height;}}
+    public int Width { get { return _width; } }
+    public int Height { get { return _height; } }
     public float[,] TemperatureMap { get { return _temperatureMapGenerator.TemperatureMap; } }
     public float[,] HeightMap { get { return _heightMapGenerator.HeightMap; } }
 
-    private void Awake() {
+    private void Awake()
+    {
         // Constructor initialisation.
         _mapGenerator = new MapGenerator();
         _temperatureMapGenerator = new TemperatureMapGenerator();
@@ -41,7 +42,8 @@ public class TileManager : MonoBehaviour
 
         // Selecting map dynamically
         Tile[,] tiles;
-        switch(_mapType) {
+        switch (_mapType)
+        {
             case var _ when _mapType == Maptype.Perlin:
                 BaseGenerate();
                 tiles = _mapGenerator.Generate(_width, _height);
@@ -69,14 +71,22 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    private void BaseGenerate() {
-        if (_temperatureMapGenerator.TemperatureMap == null) {
-            _temperatureMapGenerator.Generate(_width, _height);
-            _mapGenerator.SetTemperatureMap(TemperatureMap);
-        }
-        if (_heightMapGenerator.HeightMap == null) {
+    private void BaseGenerate()
+    {
+        if (HeightMap != null)
+        {
+            _mapGenerator.SetHeightMap(HeightMap);
+        } else {
             _heightMapGenerator.Generate(_width, _height);
             _mapGenerator.SetHeightMap(HeightMap);
+        }
+
+        if (TemperatureMap != null)
+        {
+            _mapGenerator.SetTemperatureMap(TemperatureMap);
+        } else {
+            _temperatureMapGenerator.Generate(_width, _height);
+            _mapGenerator.SetTemperatureMap(TemperatureMap);
         }
     }
 }

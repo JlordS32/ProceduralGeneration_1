@@ -36,15 +36,15 @@ public class MapEditor : Editor
 
             // Convert the world mouse position to the tilemap's cell position
             Tilemap tilemap = tileManager.GetComponent<Tilemap>();
-            float[,] heightMap = tileManager.HeightMap;
-            float[,] temperatureMap = tileManager.TemperatureMap;
+            float[,] heightMap;
+            float[,] temperatureMap;
             Vector3Int tilePosition = tilemap.WorldToCell(worldMousePosition);
 
             // If null, regenerate maps
-            if (heightMap == null) tileManager.GenerateMap();
+            if (tileManager.HeightMap == null) tileManager.GenerateMap();
             heightMap = tileManager.HeightMap;
 
-            if (temperatureMap == null) tileManager.GenerateMap();
+            if (tileManager.HeightMap == null) tileManager.GenerateMap();
             temperatureMap = tileManager.TemperatureMap;
 
             // Check if the tile position is within the bounds of the heightMap and temperatureMap
@@ -68,7 +68,6 @@ public class MapEditor : Editor
             }
             else
             {
-                // If the mouse position is out of bounds, display a fallback message
                 Handles.BeginGUI();
                 GUI.Label(new Rect(10, 10, 300, 20), "Mouse position is outside of the tilemap.");
                 Handles.EndGUI();

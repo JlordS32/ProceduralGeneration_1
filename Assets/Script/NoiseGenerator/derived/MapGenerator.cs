@@ -5,12 +5,11 @@ using UnityEngine.Tilemaps;
 public class MapGenerator : NoiseGenerator
 {
     [Header ("Perlin Map Generator Params")]
-    [SerializeField] private TerrainType[] _terrainType;
+    [SerializeField] private HeightZoneObject _obj;
     
     // Temperature map
     private float[,] _temperatureMap;
     public void SetTemperatureMap(float[,] temperatureMap) => _temperatureMap = temperatureMap;
-
 
     // Height map
     private float[,] _heightMap;
@@ -18,25 +17,22 @@ public class MapGenerator : NoiseGenerator
 
     public override Tile[,] Generate(int width, int height)
     {
-        // Generate the Perlin noise map
-        float[,] noiseMap = Noise.GenerateNoiseMap(width, height, _seed, _noiseScale, _octaves, _lacunarity, _persistance, _offset);
-
         // Initialize the Tile array
         _tiles = new Tile[width, height];
 
         // Map the noise values to terrain types
         for (int x = 0; x < width; x++)
-        {
+        { 
             for (int y = 0; y < height; y++)
             {
-                float currentHeight = noiseMap[x, y];
+                float elevation = _heightMap[x, y];
 
                 // Determine the appropriate terrain tile based on noise height
-                foreach (TerrainType terrain in _terrainType)
+                foreach (HeightZone terrain in _obj.HeightZones)
                 {
-                    if (currentHeight <= terrain.NoiseHeight)
+                    if (elevation >= terrain.MinHeight && elevation < terrain.MaxHeight)
                     {
-                        _tiles[x, y] = terrain.tile;
+                        _tiles[x, y] = terrain.Tile;
                         break;
                     }
                 }
@@ -45,16 +41,4 @@ public class MapGenerator : NoiseGenerator
 
         return _tiles;
     }
-}
-
-[System.Serializable]
-public struct TerrainType
-{
-    public string Name;
-    public float NoiseHeight;
-    public Tile tile;
-}
-
-public struct Biome {
-    public float temperature;
 }
