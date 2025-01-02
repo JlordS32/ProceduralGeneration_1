@@ -5,15 +5,14 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class TerrainObject : ScriptableObject
 {
-    public TerrainType[] Terrains;
+    public Terrain[] Terrains;
 }
 
 [System.Serializable]
-public struct TerrainType
+public class Terrain
 {
     public string Name;
     public float MinHeight;
     public float MaxHeight;
-    public Tile Tile;
-    public Biome biome;
+    public Biome[] Biomes;
 }
