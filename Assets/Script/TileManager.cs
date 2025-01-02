@@ -42,21 +42,22 @@ public class TileManager : MonoBehaviour
 
         Tile[,] tiles;
 
-        // Generating
-        _mapGenerator.Generate(_width, _height);
+        // Base Generation, we regenerate some of the layered noise maps every time the map is generated.
         _temperatureMapGenerator.Generate(_width, _height);
         _heightMapGenerator.Generate(_width, _height);
 
         switch (_mapType)
         {
             case var _ when _mapType == Maptype.Perlin:
+                _mapGenerator.SetTemperatureMap(TemperatureMap);
+                _mapGenerator.SetHeightMap(HeightMap);
                 tiles = _mapGenerator.Generate(_width, _height);
                 break;
             case var _ when _mapType == Maptype.Temperature:
-                tiles = _temperatureMapGenerator.Generate(_width, _height);
+                tiles = _temperatureMapGenerator.GenerateTiles(_width, _height);
                 break;
             case var _ when _mapType == Maptype.Height:
-                tiles = _heightMapGenerator.Generate(_width, _height);
+                tiles = _heightMapGenerator.GenerateTiles(_width, _height);
                 break;
             default:
                 tiles = new Tile[0, 0];

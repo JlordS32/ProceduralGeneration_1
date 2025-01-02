@@ -17,10 +17,8 @@ public class TemperatureMapGenerator : NoiseGenerator
     public override void Generate(int width, int height)
     {
         _noiseMap = Noise.GenerateNoiseMap(width, height, _seed, _noiseScale, _octaves, _lacunarity, _persistance, _offset);
-
-        // Initialize the Tile array
-        _tiles = new Tile[width, height];
         _tempMap = new float[width, height];
+        _tiles = new Tile[width, height];
 
         // Map the noise values to terrain types
         for (int x = 0; x < width; x++)

@@ -19,9 +19,8 @@ public class HeightMapGenerator : NoiseGenerator
     public override void Generate(int width, int height)
     {
         _noiseMap = Noise.GenerateNoiseMap(width, height, _seed, _noiseScale, _octaves, _lacunarity, _persistance, _offset);
-
-        // Initialize the Tile array
         _heightMap = new float[width, height];
+        _tiles = new Tile[width, height];
 
         for (int x = 0; x < width; x++)
         {
@@ -43,7 +42,7 @@ public class HeightMapGenerator : NoiseGenerator
     }
 
     public override Tile[,] GenerateTiles(int width, int height)
-    {   
+    {
         _noiseMap = Noise.GenerateNoiseMap(width, height, _seed, _noiseScale, _octaves, _lacunarity, _persistance, _offset);
 
         for (int x = 0; x < width; x++)
