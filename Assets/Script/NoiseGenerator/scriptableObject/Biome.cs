@@ -5,5 +5,6 @@ public class Biome
 {
     public string Name;
     public float MaxTemperature;
+    public float MinTemperature;
     public Tile Tile;
 }

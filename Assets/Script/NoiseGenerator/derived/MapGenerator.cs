@@ -64,7 +64,7 @@ public class MapGenerator
         // Collect matching biomes
         foreach (Biome biome in terrain.Biomes)
         {
-            if (temperature <= biome.MaxTemperature)
+            if (temperature >= biome.MinTemperature && temperature <= biome.MaxTemperature)
             {
                 biomes.Add(biome);
             }
@@ -74,7 +74,7 @@ public class MapGenerator
         if (biomes.Count == 0)
         {
             Debug.LogWarning($"No biome matches temperature {temperature} in terrain {terrain.Name}");
-            return null; // Or assign a default biome
+            return null; 
         }
 
         // Select a random biome from the matches
