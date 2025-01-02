@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [System.Serializable]
-public class MapGenerator : NoiseGenerator
+public class MapGenerator
 {
     [Header ("Perlin Map Generator Params")]
-    [SerializeField] private HeightZoneObject _obj;
+    [SerializeField] private TerrainObject _terrainObj;
     
     // Temperature map
     private float[,] _temperatureMap;
@@ -15,7 +15,10 @@ public class MapGenerator : NoiseGenerator
     private float[,] _heightMap;
     public void SetHeightMap(float[,] heightMap) => _heightMap = heightMap;
 
-    public override Tile[,] Generate(int width, int height)
+    // Variables
+    private Tile [,] _tiles;
+
+    public Tile[,] Generate(int width, int height)
     {
         // Initialize the Tile array
         _tiles = new Tile[width, height];
@@ -28,7 +31,7 @@ public class MapGenerator : NoiseGenerator
                 float elevation = _heightMap[x, y];
 
                 // Determine the appropriate terrain tile based on noise height
-                foreach (HeightZone terrain in _obj.HeightZones)
+                foreach (TerrainType terrain in _terrainObj.Terrains)
                 {
                     if (elevation >= terrain.MinHeight && elevation < terrain.MaxHeight)
                     {

@@ -15,5 +15,6 @@ public abstract class NoiseGenerator {
     protected Tile[,] _tiles;
 
     // Abstract methods
-    public abstract Tile[,] Generate(int width, int height);
+    public abstract void Generate(int width, int height);
+    public abstract Tile[,] GenerateTiles(int width, int height);
 }

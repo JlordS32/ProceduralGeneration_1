@@ -40,12 +40,16 @@ public class TileManager : MonoBehaviour
         int xOffset = -_width / 2;
         int yOffset = -_height / 2;
 
-        // Selecting map dynamically
         Tile[,] tiles;
+
+        // Generating
+        _mapGenerator.Generate(_width, _height);
+        _temperatureMapGenerator.Generate(_width, _height);
+        _heightMapGenerator.Generate(_width, _height);
+
         switch (_mapType)
         {
             case var _ when _mapType == Maptype.Perlin:
-                BaseGenerate();
                 tiles = _mapGenerator.Generate(_width, _height);
                 break;
             case var _ when _mapType == Maptype.Temperature:
@@ -68,25 +72,6 @@ public class TileManager : MonoBehaviour
                 Vector3Int tilePosition = new(x + xOffset, y + yOffset, 0);
                 _tilemap.SetTile(tilePosition, tiles[x, y]);
             }
-        }
-    }
-
-    private void BaseGenerate()
-    {
-        if (HeightMap != null)
-        {
-            _mapGenerator.SetHeightMap(HeightMap);
-        } else {
-            _heightMapGenerator.Generate(_width, _height);
-            _mapGenerator.SetHeightMap(HeightMap);
-        }
-
-        if (TemperatureMap != null)
-        {
-            _mapGenerator.SetTemperatureMap(TemperatureMap);
-        } else {
-            _temperatureMapGenerator.Generate(_width, _height);
-            _mapGenerator.SetTemperatureMap(TemperatureMap);
         }
     }
 }

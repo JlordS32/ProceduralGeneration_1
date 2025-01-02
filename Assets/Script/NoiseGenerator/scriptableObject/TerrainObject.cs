@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "New WeatherZoneObject", menuName = "NoiseGenerators/Object/TerrainObject")]
 [System.Serializable]
 public class TerrainObject : ScriptableObject {
-
+    public TerrainType[] Terrains;
 }
 
 [System.Serializable]
@@ -14,5 +14,5 @@ public struct TerrainType
     public float MinHeight;
     public float MaxHeight;
     public float Temperature;
-    public Tile tile;
+    public Tile Tile;
 }

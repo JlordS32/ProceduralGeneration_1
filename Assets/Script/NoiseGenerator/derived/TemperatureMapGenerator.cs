@@ -11,12 +11,12 @@ public class TemperatureMapGenerator : NoiseGenerator
 
     // Variables
     private float[,] _tempMap;
+    private float[,] _noiseMap;
     public float[,] TemperatureMap { get { return _tempMap; } }
 
-    public override Tile[,] Generate(int width, int height)
+    public override void Generate(int width, int height)
     {
-        // Generate the Perlin noise map
-        float[,] noiseMap = Noise.GenerateNoiseMap(width, height, _seed, _noiseScale, _octaves, _lacunarity, _persistance, _offset);
+        _noiseMap = Noise.GenerateNoiseMap(width, height, _seed, _noiseScale, _octaves, _lacunarity, _persistance, _offset);
 
         // Initialize the Tile array
         _tiles = new Tile[width, height];
@@ -27,7 +27,32 @@ public class TemperatureMapGenerator : NoiseGenerator
         {
             for (int y = 0; y < height; y++)
             {
-                float currentHeight = noiseMap[x, y];
+                float currentHeight = _noiseMap[x, y];
+                // Calculate the interporation between min and max temperatured base on noise value.
+                float temperature = Mathf.Lerp(_minTemperature, _maxTemperature, currentHeight);
+
+                foreach (WeatherZone zone in _weatherZones.WeatherZones)
+                {
+                    if (temperature <= zone.Temperature)
+                    {
+                        _tiles[x, y] = zone.Tile;
+                        _tempMap[x, y] = temperature;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public override Tile[,] GenerateTiles(int width, int height)
+    {
+        _noiseMap = Noise.GenerateNoiseMap(width, height, _seed, _noiseScale, _octaves, _lacunarity, _persistance, _offset);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                float currentHeight = _noiseMap[x, y];
                 // Calculate the interporation between min and max temperatured base on noise value.
                 float temperature = Mathf.Lerp(_minTemperature, _maxTemperature, currentHeight);
 
