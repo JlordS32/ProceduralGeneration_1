@@ -19,6 +19,8 @@ public class TileManager : MonoBehaviour
     public bool AutoUpdate { get { return _autoUpdate; } }
     public int Width { get { return _width;}}
     public int Height { get { return _height;}}
+    public float[,] TemperatureMap { get { return _temperatureMapGenerator.TemperatureMap; } }
+    public float[,] HeightMap { get { return _heightMapGenerator.HeightMap; } }
 
     private void Awake() {
         // Constructor initialisation.
@@ -70,11 +72,11 @@ public class TileManager : MonoBehaviour
     private void BaseGenerate() {
         if (_temperatureMapGenerator.TemperatureMap == null) {
             _temperatureMapGenerator.Generate(_width, _height);
-            _mapGenerator.SetTemperatureMap(_temperatureMapGenerator.TemperatureMap);
+            _mapGenerator.SetTemperatureMap(TemperatureMap);
         }
         if (_heightMapGenerator.HeightMap == null) {
             _heightMapGenerator.Generate(_width, _height);
-            _mapGenerator.SetHeightMap(_heightMapGenerator.HeightMap);
+            _mapGenerator.SetHeightMap(HeightMap);
         }
     }
 }

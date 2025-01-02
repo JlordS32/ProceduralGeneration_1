@@ -34,6 +34,7 @@ public class HeightMapGenerator : NoiseGenerator
                     if (elevation >= zone.MinHeight && elevation < zone.MaxHeight)
                     {
                         _tiles[x, y] = zone.Tile;
+                        _heightMap[x, y] = elevation;
                         break;
                     }
                 }
