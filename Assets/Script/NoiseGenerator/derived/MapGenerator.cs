@@ -19,21 +19,31 @@ public class MapGenerator
     // Variables
     private Tile[,] _tiles;
     private WaveCollapse _waveCollapse;
+    private int _width, _height;
 
-    // TODO: Use WaveCollapse Function to dynamically place tile depending on the region/terrain area.'
-    public Tile[,] Generate(int width, int height)
-    {
-        // _waveCollapse = new WaveCollapse(width, height);
+    // TODO: Check constructor can work with waveCollapse function during runtime.
+    public MapGenerator(int width, int height) {
+        _width = width;
+        _height = height;
 
+        // TODO: Memoize the fetched TileRules.
         // Initialize the Tile array
         List<TileRule> biomeTiles = new();
         _tiles = new Tile[width, height];
         foreach (Terrain terrain in _terrainObj.Terrains) {
             foreach (Biome biome in terrain.Biomes) {
-                // biomeTiles.Add(biome.Tile);
+                foreach(TileRule tileRule in biome.TileRules) {
+                    biomeTiles.Add(tileRule);
+                }
             }
         }
 
+        _waveCollapse = new WaveCollapse(width, height, biomeTiles);
+    }
+
+    // TODO: Use WaveCollapse Function to dynamically place tile depending on the region/terrain area.'
+    public Tile[,] Generate(int width, int height)
+    {
         // Map the noise values to terrain types
         for (int x = 0; x < width; x++)
         {
