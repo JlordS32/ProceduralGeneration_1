@@ -28,7 +28,7 @@ public class TileManager : MonoBehaviour
     private void Awake()
     {
         // Constructor initialisation.
-        _mapGenerator = new MapGenerator(_width, _height);
+        _mapGenerator = new MapGenerator();
         _temperatureMapGenerator = new TemperatureMapGenerator();
         _heightMapGenerator = new HeightMapGenerator();
 
