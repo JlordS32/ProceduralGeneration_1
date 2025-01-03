@@ -8,13 +8,11 @@ public class WaveCollapse
     private Cell[,] _cells;
     private TileRule _selectedCell;
     private int _width, _height;
-    private TileBase[,] _tiles;
 
     public WaveCollapse(int width, int height, List<TileRule> tileRules)
     {
         // Initialise 2D Cells of width and height
         _cells = new Cell[width, height];
-        _tiles = new TileBase[width, height];
         _width = width;
         _height = height;
 
@@ -29,8 +27,16 @@ public class WaveCollapse
         }
     }
 
+    public TileBase GetTile(int x, int y)
+    {
+        Collapse(x, y);
+        return _cells[x, y].Options[0].tile;
+    }
+
     public TileBase[,] GetTiles()
     {
+        TileBase[,] tiles = new TileBase[_width, _height];
+
         while (!IsComplete())
         {
             // Find the cell with the lowest entropy that is not collapsed
@@ -40,10 +46,10 @@ public class WaveCollapse
             Collapse(x, y);
 
             // Update the tiles array
-            _tiles[x, y] = _cells[x, y].Options[0].tile;
+            tiles[x, y] = _cells[x, y].Options[0].tile;
         }
 
-        return _tiles;
+        return tiles;
     }
 
     private (int, int) FindLowestEntropyCell()
