@@ -8,6 +8,7 @@ public class TemperatureMapGenerator : NoiseGenerator
     [SerializeField] private WeatherZoneObject _weatherZones;
     [SerializeField] private int _minTemperature;
     [SerializeField] private int _maxTemperature;
+    [SerializeField] private int _heatOffset;
 
     // Variables
     private float[,] _tempMap;
@@ -21,13 +22,13 @@ public class TemperatureMapGenerator : NoiseGenerator
         _tiles = new Tile[width, height];
 
         // Map the noise values to terrain types
-        for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
         {
-            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
             {
                 float currentHeight = _noiseMap[x, y];
                 // Calculate the interporation between min and max temperatured base on noise value.
-                float temperature = Mathf.Lerp(_minTemperature, _maxTemperature, currentHeight);
+                float temperature = Mathf.Lerp(_minTemperature, _maxTemperature, currentHeight) + _heatOffset;
 
                 foreach (WeatherZone zone in _weatherZones.WeatherZones)
                 {
@@ -52,7 +53,7 @@ public class TemperatureMapGenerator : NoiseGenerator
             {
                 float currentHeight = _noiseMap[x, y];
                 // Calculate the interporation between min and max temperatured base on noise value.
-                float temperature = Mathf.Lerp(_minTemperature, _maxTemperature, currentHeight);
+                float temperature = Mathf.Lerp(_minTemperature, _maxTemperature, currentHeight) + _heatOffset;
 
                 foreach (WeatherZone zone in _weatherZones.WeatherZones)
                 {

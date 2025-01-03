@@ -34,7 +34,7 @@ public class MapGenerator
 
                 foreach (Terrain terrain in _terrainObj.Terrains)
                 {
-                    if (elevation >= terrain.MinHeight && elevation < terrain.MaxHeight)
+                    if (Utility.WithinRange(elevation, terrain.MinHeight, terrain.MaxHeight))
                     {
                         Biome biome = SelectBiome(temperature, terrain);
                         if (biome != null)
@@ -64,7 +64,7 @@ public class MapGenerator
         // Collect matching biomes
         foreach (Biome biome in terrain.Biomes)
         {
-            if (temperature >= biome.MinTemperature && temperature <= biome.MaxTemperature)
+            if (Utility.WithinRange(temperature, biome.MinTemperature, biome.MaxTemperature))
             {
                 biomes.Add(biome);
             }

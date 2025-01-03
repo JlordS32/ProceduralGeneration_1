@@ -8,6 +8,11 @@ public class HeightMapGenerator : NoiseGenerator
     [SerializeField] private HeightZoneObject _heightZoneObj;
     [SerializeField] private float _minHeight;
     [SerializeField] private float _maxHeight;
+    [SerializeField] private float _heightOffset;
+    
+    [Header("Adjust Noise Params to offset borders")]
+    [SerializeField] private float _borderSize; 
+    [SerializeField] private float _borderScaleOffset; 
 
     // Variables
     private float[,] _heightMap;
@@ -21,12 +26,13 @@ public class HeightMapGenerator : NoiseGenerator
         _heightMap = new float[width, height];
         _tiles = new Tile[width, height];
 
-        for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
         {
-            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
             {
                 float currentHeight = _noiseMap[x, y];
-                float elevation = Mathf.Lerp(_minHeight, _maxHeight, currentHeight);
+
+                float elevation = Mathf.Lerp(_minHeight, _maxHeight, currentHeight) + _heightOffset;
 
                 foreach (HeightZone zone in _heightZoneObj.HeightZones)
                 {
@@ -49,7 +55,8 @@ public class HeightMapGenerator : NoiseGenerator
             for (int y = 0; y < height; y++)
             {
                 float currentHeight = _noiseMap[x, y];
-                float elevation = Mathf.Lerp(_minHeight, _maxHeight, currentHeight);
+
+                float elevation = Mathf.Lerp(_minHeight, _maxHeight, currentHeight) + _heightOffset;
 
                 foreach (HeightZone zone in _heightZoneObj.HeightZones)
                 {

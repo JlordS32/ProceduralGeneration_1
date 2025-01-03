@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 public class Biome
 {
     public string Name;
-    public float MaxTemperature;
     public float MinTemperature;
+    public float MaxTemperature;
     public Tile Tile;
 }
