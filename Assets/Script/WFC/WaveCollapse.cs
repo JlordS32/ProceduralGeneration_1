@@ -9,7 +9,7 @@ public class WaveCollapse
     private TileRule _selectedCell;
     private int _width, _height;
 
-    public WaveCollapse(int width, int height, List<TileRule> tileRules)
+    public WaveCollapse(int width, int height, List<TileRule> tileRules) // TODO: Experiment if function still works without tileRules
     {
         // Initialise 2D Cells of width and height
         _cells = new Cell[width, height];

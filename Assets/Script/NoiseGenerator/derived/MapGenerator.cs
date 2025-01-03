@@ -18,9 +18,13 @@ public class MapGenerator
 
     // Variables
     private Tile[,] _tiles;
+    private WaveCollapse _waveCollapse;
 
+    // TODO: Use WaveCollapse Function to dynamically place tile depending on the region/terrain area.'
     public Tile[,] Generate(int width, int height)
     {
+        // _waveCollapse = new WaveCollapse(width, height);
+
         // Initialize the Tile array
         _tiles = new Tile[width, height];
 
