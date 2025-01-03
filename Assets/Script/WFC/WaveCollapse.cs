@@ -33,6 +33,9 @@ public class WaveCollapse
         return _cells[x, y].Options[0].tile;
     }
 
+    // TODO: Experiment this function and see if we can use it with MapGenerator.
+    // TODO: Check your code for reference. 
+    //       Link: https://github.com/JlordS32/WaveCollapseFunction/blob/c3491d5d8c7c8b6735ebcf09ce74422e949ce206/Assets/Script/WaveCollapse.cs
     public TileBase GetTile(int x, int y, TileRule tile)
     {
         Collapse(x, y, tile);

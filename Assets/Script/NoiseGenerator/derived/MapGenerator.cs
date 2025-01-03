@@ -26,7 +26,13 @@ public class MapGenerator
         // _waveCollapse = new WaveCollapse(width, height);
 
         // Initialize the Tile array
+        List<TileRule> biomeTiles = new();
         _tiles = new Tile[width, height];
+        foreach (Terrain terrain in _terrainObj.Terrains) {
+            foreach (Biome biome in terrain.Biomes) {
+                // biomeTiles.Add(biome.Tile);
+            }
+        }
 
         // Map the noise values to terrain types
         for (int x = 0; x < width; x++)
