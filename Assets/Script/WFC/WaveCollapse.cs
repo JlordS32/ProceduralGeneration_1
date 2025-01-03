@@ -9,7 +9,7 @@ public class WaveCollapse
     private TileRule _selectedCell;
     private int _width, _height;
 
-    public WaveCollapse(int width, int height, List<TileRule> tileRules) // TODO: Experiment if function still works without tileRules
+    public WaveCollapse(int width, int height, List<TileRule> tileRules)
     {
         // Initialise 2D Cells of width and height
         _cells = new Cell[width, height];
@@ -30,6 +30,12 @@ public class WaveCollapse
     public TileBase GetTile(int x, int y)
     {
         Collapse(x, y);
+        return _cells[x, y].Options[0].tile;
+    }
+
+    public TileBase GetTile(int x, int y, TileRule tile)
+    {
+        Collapse(x, y, tile);
         return _cells[x, y].Options[0].tile;
     }
 
@@ -73,7 +79,6 @@ public class WaveCollapse
         return (selectedX, selectedY);
     }
 
-
     private bool IsComplete()
     {
         for (int x = 0; x < _width; x++)
@@ -88,6 +93,16 @@ public class WaveCollapse
         }
 
         return true;
+    }
+
+    private void Collapse(int x, int y, TileRule tile)
+    {
+        _cells[x, y].IsCollapsed = true;
+        _cells[x, y].Options = new List<TileRule> { tile };
+        _selectedCell = _cells[x, y].Options[0];
+
+        // Start propagating neighboring cells
+        Propagate(x, y);
     }
 
     private void Collapse(int x, int y)
@@ -160,7 +175,7 @@ public struct Cell
 
     public void UpdateCell(TileRule selectedCell, Vector2Int direction)
     {
-        List<TileRule> validOptions = new List<TileRule>();
+        List<TileRule> validOptions = new();
 
         foreach (TileRule rule in Options)
         {
