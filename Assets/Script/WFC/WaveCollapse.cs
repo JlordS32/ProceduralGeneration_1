@@ -27,7 +27,7 @@ public class WaveCollapse
         }
     }
 
-    public TileBase GetTile(int x, int y)
+    public Tile GetTile(int x, int y)
     {
         Collapse(x, y);
         return _cells[x, y].Options[0].tile;
@@ -36,15 +36,15 @@ public class WaveCollapse
     // TODO: Experiment this function and see if we can use it with MapGenerator.
     // TODO: Check your code for reference. 
     //       Link: https://github.com/JlordS32/WaveCollapseFunction/blob/c3491d5d8c7c8b6735ebcf09ce74422e949ce206/Assets/Script/WaveCollapse.cs
-    public TileBase GetTile(int x, int y, TileRule tile)
+    public Tile GetTile(int x, int y, List<TileRule> tiles)
     {
-        Collapse(x, y, tile);
+        Collapse(x, y, tiles);
         return _cells[x, y].Options[0].tile;
     }
 
-    public TileBase[,] GetTiles()
+    public Tile[,] GetTiles()
     {
-        TileBase[,] tiles = new TileBase[_width, _height];
+        Tile[,] tiles = new Tile[_width, _height];
 
         while (!IsComplete())
         {
@@ -98,10 +98,10 @@ public class WaveCollapse
         return true;
     }
 
-    private void Collapse(int x, int y, TileRule tile)
+    private void Collapse(int x, int y, List<TileRule> tiles)
     {
         _cells[x, y].IsCollapsed = true;
-        _cells[x, y].Options = new List<TileRule> { tile };
+        _cells[x, y].Options = tiles;
         _selectedCell = _cells[x, y].Options[0];
 
         // Start propagating neighboring cells

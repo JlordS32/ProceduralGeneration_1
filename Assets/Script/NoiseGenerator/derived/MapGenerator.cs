@@ -26,24 +26,26 @@ public class MapGenerator
         _width = width;
         _height = height;
 
-        // TODO: Memoize the fetched TileRules.
-        // Initialize the Tile array
-        List<TileRule> biomeTiles = new();
-        _tiles = new Tile[width, height];
-        foreach (Terrain terrain in _terrainObj.Terrains) {
-            foreach (Biome biome in terrain.Biomes) {
-                foreach(TileRule tileRule in biome.TileRules) {
-                    biomeTiles.Add(tileRule);
-                }
-            }
-        }
+        // // TODO: Memoize the fetched TileRules.
+        // // Initialize the Tile array
+        // List<TileRule> biomeTiles = new();
+        // _tiles = new Tile[width, height];
+        // foreach (Terrain terrain in _terrainObj.Terrains) {
+        //     foreach (Biome biome in terrain.Biomes) {
+        //         foreach(TileRule tileRule in biome.TileRules) {
+        //             biomeTiles.Add(tileRule);
+        //         }
+        //     }
+        // }
 
-        _waveCollapse = new WaveCollapse(width, height, biomeTiles);
+        // _waveCollapse = new WaveCollapse(width, height, biomeTiles);
     }
 
     // TODO: Use WaveCollapse Function to dynamically place tile depending on the region/terrain area.'
     public Tile[,] Generate(int width, int height)
     {
+        InitialiseWFC(width, height);
+
         // Map the noise values to terrain types
         for (int x = 0; x < width; x++)
         {
@@ -59,12 +61,12 @@ public class MapGenerator
                         Biome biome = SelectBiome(temperature, terrain);
                         if (biome != null)
                         {
-                            _tiles[x, y] = biome.Tile;
+                            _tiles[x, y] = _waveCollapse.GetTile(x, y, biome.TileRules);
                         }
                         else
                         {
                             Debug.LogWarning($"No valid biome for temperature {temperature} at ({x}, {y})");
-                            _tiles[x, y] = null; // TODO: Assign a default tile.
+                            _tiles[x, y] = null; 
                         }
 
                         _tiles[x, y] = biome.Tile;
@@ -77,9 +79,23 @@ public class MapGenerator
         return _tiles;
     }
 
+    private void InitialiseWFC(int width, int height) {
+        List<TileRule> biomeTiles = new();
+        _tiles = new Tile[width, height];
+        foreach (Terrain terrain in _terrainObj.Terrains) {
+            foreach (Biome biome in terrain.Biomes) {
+                foreach(TileRule tileRule in biome.TileRules) {
+                    biomeTiles.Add(tileRule);
+                }
+            }
+        }
+
+        _waveCollapse = new WaveCollapse(width, height, biomeTiles);
+    }
+
     private Biome SelectBiome(float temperature, Terrain terrain)
     {
-        List<Biome> biomes = new List<Biome>();
+        List<Biome> biomes = new();
 
         // Collect matching biomes
         foreach (Biome biome in terrain.Biomes)

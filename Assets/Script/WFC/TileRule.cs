@@ -6,7 +6,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class TileRule : ScriptableObject
 {
-    public TileBase tile;
+    public Tile tile;
     public float probability = 0.5f;
     public List<TileRule> upNeighbors;
     public List<TileRule> downNeighbors;
