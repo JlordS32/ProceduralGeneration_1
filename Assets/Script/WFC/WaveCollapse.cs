@@ -10,21 +10,42 @@ public class WaveCollapse
     private TileRule _selectedCell;
     private int _width, _height;
 
-    public WaveCollapse(int width, int height, List<TileRule> tileRules)
+    public WaveCollapse(int width, int height, object tileRules)
     {
         // Initialise 2D Cells of width and height
         _cells = new Cell[width, height];
         _width = width;
         _height = height;
 
-        // Instantiate each cells
-        for (int x = 0; x < width; x++)
+        // If tileRules is a HashSet
+        if (tileRules is HashSet<TileRule> hashSet)
         {
-            for (int y = 0; y < height; y++)
+            // Instantiate each cell using HashSet
+            for (int x = 0; x < width; x++)
             {
-                // By default, the cell should not be collapsed and we give it all N tiles
-                _cells[x, y] = new Cell(false, new List<TileRule>(tileRules));
+                for (int y = 0; y < height; y++)
+                {
+                    // By default, the cell should not be collapsed and we give it all N tiles
+                    _cells[x, y] = new Cell(false, new List<TileRule>(hashSet));
+                }
             }
+        }
+
+        else if (tileRules is List<TileRule> list)
+        {
+            // Instantiate each cell using List
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    // By default, the cell should not be collapsed and we give it all N tiles
+                    _cells[x, y] = new Cell(false, new List<TileRule>(list));
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("tileRules must be either a HashSet<TileRule> or a List<TileRule>");
         }
     }
 

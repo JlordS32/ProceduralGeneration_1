@@ -8,6 +8,7 @@ public class MapGenerator
 {
     [Header("Perlin Map Generator Params")]
     [SerializeField] private TerrainObject _terrainObj;
+    [SerializeField] private Tile _defaultTile;
 
     // Temperature map
     private float[,] _temperatureMap;
@@ -20,7 +21,7 @@ public class MapGenerator
     // Variables
     private Tile[,] _tiles;
     private WaveCollapse _waveCollapse;
-    private List<TileRule> _cachedTileRules;
+    private HashSet<TileRule> _cachedTileRules;
     private int _cachedTerrainHash;
 
     // TODO: Use WaveCollapse Function to dynamically place tile depending on the region/terrain area.'
@@ -44,6 +45,7 @@ public class MapGenerator
                     if (Utility.WithinRange(elevation, terrain.MinHeight, terrain.MaxHeight))
                     {
                         Biome biome = SelectBiome(temperature, terrain);
+                        
                         if (biome != null)
                         {
                             _tiles[x, y] = _waveCollapse.GetTile(x, y, biome);
@@ -51,7 +53,7 @@ public class MapGenerator
                         else
                         {
                             Debug.LogWarning($"No valid biome for temperature {temperature} at ({x}, {y})");
-                            _tiles[x, y] = biome.TileRules[0].tile; // Default Tile
+                            _tiles[x, y] = _defaultTile; // Default Tile
                         }
 
                         break;
@@ -63,23 +65,23 @@ public class MapGenerator
         return _tiles;
     }
 
-    // BUG: Potential Duplicated TileRules
-    // BUG: Current _cachedTerrainTiles Count is 81, it should be much less than that.
     private void InitialiseWFC(int width, int height)
     {
         int currentHash = Utility.GetTerrainHash(_terrainObj);
 
         if (_cachedTileRules == null || _cachedTerrainHash != currentHash)
         {
+            // Initialize _cachedTileRules if it's null
+            _cachedTileRules ??= new HashSet<TileRule>();
+
             foreach (Terrain terrain in _terrainObj.Terrains)
             {
                 foreach (Biome biome in terrain.Biomes)
                 {
-                    _cachedTileRules.AddRange(biome.TileRules);
+                    _cachedTileRules.UnionWith(biome.TileRules);  // Adds only unique TileRules
                 }
             }
 
-            // Update the cache hash
             _cachedTerrainHash = currentHash;
             Debug.Log("Creating cached tile rules.");
         }
@@ -91,6 +93,7 @@ public class MapGenerator
 
         _waveCollapse = new WaveCollapse(width, height, _cachedTileRules);
     }
+
 
     private Biome SelectBiome(float temperature, Terrain terrain)
     {
