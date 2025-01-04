@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
+using System.Linq;
 
 public class WaveCollapse
 {
@@ -36,9 +37,9 @@ public class WaveCollapse
     // TODO: Experiment this function and see if we can use it with MapGenerator.
     // TODO: Check your code for reference. 
     //       Link: https://github.com/JlordS32/WaveCollapseFunction/blob/c3491d5d8c7c8b6735ebcf09ce74422e949ce206/Assets/Script/WaveCollapse.cs
-    public Tile GetTile(int x, int y, List<TileRule> tiles)
+    public Tile GetTile(int x, int y, Biome biome)
     {
-        Collapse(x, y, tiles);
+        Collapse(x, y, biome);
         return _cells[x, y].Options[0].tile;
     }
 
@@ -98,11 +99,15 @@ public class WaveCollapse
         return true;
     }
 
-    private void Collapse(int x, int y, List<TileRule> tiles)
+    private void Collapse(int x, int y, Biome biome)
     {
+        // Update current options to that of the biome.
+        _cells[x, y].Options = new List<TileRule>(biome.TileRules);
+
+        // Collapse the cell and update tile
+        _selectedCell = biome.TileRules[0];
         _cells[x, y].IsCollapsed = true;
-        _cells[x, y].Options = tiles;
-        _selectedCell = _cells[x, y].Options[0];
+        _cells[x, y].Options = new List<TileRule> { _selectedCell };
 
         // Start propagating neighboring cells
         Propagate(x, y);
@@ -192,6 +197,9 @@ public struct Cell
 
     public readonly bool IsCompatible(TileRule selectedCell, TileRule rule, Vector2Int direction)
     {
+        if (selectedCell == null || rule == null)
+            return false;
+
         return direction switch
         {
             var _ when direction == Vector2Int.up => selectedCell.upNeighbors.Contains(rule),
@@ -201,4 +209,5 @@ public struct Cell
             _ => false,
         };
     }
+
 }

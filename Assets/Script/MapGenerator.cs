@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -45,15 +46,14 @@ public class MapGenerator
                         Biome biome = SelectBiome(temperature, terrain);
                         if (biome != null)
                         {
-                            _tiles[x, y] = _waveCollapse.GetTile(x, y, biome.TileRules);
+                            _tiles[x, y] = _waveCollapse.GetTile(x, y, biome);
                         }
                         else
                         {
                             Debug.LogWarning($"No valid biome for temperature {temperature} at ({x}, {y})");
-                            _tiles[x, y] = null;
+                            _tiles[x, y] = biome.TileRules[0].tile; // Default Tile
                         }
 
-                        _tiles[x, y] = biome.Tile;
                         break;
                     }
                 }
@@ -63,6 +63,8 @@ public class MapGenerator
         return _tiles;
     }
 
+    // BUG: Potential Duplicated TileRules
+    // BUG: Current _cachedTerrainTiles Count is 81, it should be much less than that.
     private void InitialiseWFC(int width, int height)
     {
         int currentHash = Utility.GetTerrainHash(_terrainObj);
@@ -83,7 +85,8 @@ public class MapGenerator
         }
         else
         {
-            Debug.Log("Reusing cached tile rules.");
+            Debug.Log(_cachedTileRules.Count);
+            Debug.Log("Reusing cached tile");
         }
 
         _waveCollapse = new WaveCollapse(width, height, _cachedTileRules);
