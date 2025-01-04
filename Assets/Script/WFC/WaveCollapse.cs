@@ -1,15 +1,16 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
-using System.Linq;
 
 public class WaveCollapse
 {
+#region VARIABLES
     // Variables
     private Cell[,] _cells;
     private TileRule _selectedCell;
     private int _width, _height;
-
+#endregion
+#region CONSTRUCTOR
     public WaveCollapse(int width, int height, object tileRules)
     {
         // Initialise 2D Cells of width and height
@@ -30,7 +31,6 @@ public class WaveCollapse
                 }
             }
         }
-
         else if (tileRules is List<TileRule> list)
         {
             // Instantiate each cell using List
@@ -48,7 +48,7 @@ public class WaveCollapse
             Debug.LogError("tileRules must be either a HashSet<TileRule> or a List<TileRule>");
         }
     }
-
+#endregion
     public Tile GetTile(int x, int y)
     {
         Collapse(x, y);
@@ -189,6 +189,7 @@ public class WaveCollapse
     }
 }
 
+#region Cell
 public struct Cell
 {
     public bool IsCollapsed;
@@ -232,3 +233,4 @@ public struct Cell
     }
 
 }
+#endregion

@@ -48,7 +48,13 @@ public class MapGenerator
                         
                         if (biome != null)
                         {
-                            _tiles[x, y] = _waveCollapse.GetTile(x, y, biome);
+                            Tile tile = _waveCollapse.GetTile(x, y, biome);
+
+                            if (tile != null) {
+                                _tiles[x, y] = tile;
+                            } else {
+                                _tiles[x, y] = _defaultTile;
+                            }
                         }
                         else
                         {
@@ -78,7 +84,7 @@ public class MapGenerator
             {
                 foreach (Biome biome in terrain.Biomes)
                 {
-                    _cachedTileRules.UnionWith(biome.TileRules);  // Adds only unique TileRules
+                    _cachedTileRules.UnionWith(biome.TileRules); 
                 }
             }
 
