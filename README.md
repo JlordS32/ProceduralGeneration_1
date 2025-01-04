@@ -17,3 +17,5 @@ thinking and solving the problems I have with this project. While it may seem th
 to me a it's a strategical retreat. 
 
 For now I'll do other more projects and gather as much experience possible.
+
+#### TL:DR; The bottleneck was me.
